@@ -1,209 +1,71 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Views
-  const loginView = document.getElementById('login-view');
-  const registerView = document.getElementById('register-view');
-  const goToRegister = document.getElementById('go-to-register');
-  const goToLogin = document.getElementById('go-to-login');
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('login-email');
+    const passwordInput = document.getElementById('login-password');
+    const loginError = document.getElementById('login-error');
+    const togglePassword = document.getElementById('toggle-password');
 
-  // Forms and message elements
-  const loginForm = document.getElementById('login-form');
-  const registrationForm = document.getElementById('registration-form');
-  
-  const loginError = document.getElementById('login-error');
-  const passwordError = document.getElementById('password-error');
-  const successMessage = document.getElementById('success-message');
+    togglePassword.addEventListener('click', () => {
+        const isPassword = passwordInput.type === 'password';
 
-  const passwordInput = document.getElementById('password');
-  const confirmPasswordInput = document.getElementById('confirm-password');
-
-  // --- Toggle Views ---
-  goToRegister.addEventListener('click', (e) => {
-    e.preventDefault();
-    loginView.classList.add('hidden');
-    registerView.classList.remove('hidden');
-    resetForms();
-  });
-
-  goToLogin.addEventListener('click', (e) => {
-    e.preventDefault();
-    registerView.classList.add('hidden');
-    loginView.classList.remove('hidden');
-    resetForms();
-  });
-
-  function resetForms() {
-    loginForm.reset();
-    registrationForm.reset();
-    loginError.textContent = '';
-    passwordError.textContent = '';
-    successMessage.classList.add('hidden');
-    
-    // Reset passwords back to password input type
-    document.querySelectorAll('.password-wrapper input').forEach(input => {
-      input.type = 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        togglePassword.textContent = isPassword ? 'Hide' : 'Show';
     });
-    document.querySelectorAll('.toggle-password').forEach(btn => {
-      btn.textContent = 'Show';
-    });
-  }
 
-  // --- Login Submission ---
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    loginError.textContent = '';
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-    const email = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value;
+        loginError.textContent = '';
 
-    if (!email || !password) {
-      loginError.textContent = 'Please fill out all fields.';
-      return;
-    }
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
 
-    const submitBtn = loginForm.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Logging in...';
-
-    fetch('http://127.0.0.1:5000/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    })
-  .then(async (response) => {
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-    }
-
-    return data;
-})
-.then(() => {
-    localStorage.setItem('userEmail', email);
-    localStorage.setItem('isLoggedIn', 'true');
-
-    alert('Login successful!');
-})
-.catch((error) => {
-    loginError.textContent = error.message;
-})
-.finally(() => {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Login';
-});
-  });
-
-  // --- Registration Submission ---
-  registrationForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    passwordError.textContent = '';
-    successMessage.classList.add('hidden');
-
-    const email = document.getElementById('email').value.trim();
-    const password = passwordInput.value;
-    const confirmPassword = confirmPasswordInput.value;
-
-    // Client-side validations
-    if (!email) {
-      passwordError.textContent = 'Email address is required.';
-      document.getElementById('email').focus();
-      return;
-    }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      passwordError.textContent = 'Please enter a valid email format.';
-      document.getElementById('email').focus();
-      return;
-    }
-    if (!password) {
-      passwordError.textContent = 'Password is required.';
-      passwordInput.focus();
-      return;
-    }
-    if (!confirmPassword) {
-      passwordError.textContent = 'Confirm password is required.';
-      confirmPasswordInput.focus();
-      return;
-    }
-    if (password !== confirmPassword) {
-      passwordError.textContent = 'Passwords do not match. Please try again.';
-      confirmPasswordInput.focus();
-      return;
-    }
-
-    const submitBtn = registrationForm.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Registering...';
-
-    fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-        confirm_password: confirmPassword
-      })
-    })
-    .then(async (response) => {
-      if (!response.ok) {
-        const errorData = await response.json();
-        let errorMessage = 'Registration failed';
-        if (errorData && errorData.detail) {
-          if (Array.isArray(errorData.detail)) {
-            errorMessage = errorData.detail.map(err => err.msg).join(', ');
-          } else {
-            errorMessage = errorData.detail;
-          }
+        if (!email || !password) {
+            loginError.textContent = 'Please fill out all fields.';
+            return;
         }
-        throw new Error(errorMessage);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      // Show success message
-      successMessage.classList.remove('hidden');
-      registrationForm.reset();
-      
-      // Reset toggled password fields
-      passwordInput.type = 'password';
-      confirmPasswordInput.type = 'password';
-      document.querySelectorAll('.password-wrapper button').forEach(btn => btn.textContent = 'Show');
-      
-      submitBtn.textContent = 'Register Account';
-      submitBtn.disabled = false;
-    })
-    .catch((error) => {
-      passwordError.textContent = error.message;
-      submitBtn.textContent = 'Register Account';
-      submitBtn.disabled = false;
-    });
-  });
 
-  // Clear errors on input
-  confirmPasswordInput.addEventListener('input', () => {
-    if (passwordError.textContent) {
-      passwordError.textContent = '';
-    }
-  });
+        const submitButton = loginForm.querySelector(
+            'button[type="submit"]'
+        );
 
-  // Password Visibility Toggle
-  const toggleButtons = document.querySelectorAll('.toggle-password');
-  toggleButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const targetId = button.getAttribute('data-target');
-      const input = document.getElementById(targetId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        button.textContent = 'Hide';
-      } else {
-        input.type = 'password';
-        button.textContent = 'Show';
-      }
+        submitButton.disabled = true;
+        submitButton.textContent = 'Logging in...';
+
+        try {
+            const response = await fetch(
+                'http://127.0.0.1:5000/api/login',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || 'Login failed'
+                );
+            }
+
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('isLoggedIn', 'true');
+
+            alert('Login successful!');
+
+        } catch (error) {
+            loginError.textContent = error.message;
+
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Login';
+        }
     });
-  });
 });
