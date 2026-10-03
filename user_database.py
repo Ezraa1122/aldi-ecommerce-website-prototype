@@ -76,35 +76,35 @@ def authenticate_user(email, password, db_path=DEFAULT_DB):
     return hmac.compare_digest(derive(password, bytes.fromhex(salt)), bytes.fromhex(expected))
 
 
-def main():
-    print("AECWR-15: local registration and login demo")
-    while True:
-        choice = input("\n1 Register | 2 Login | 3 Show saved users | 4 Exit: ").strip()
-        if choice == "4":
-            break
-        if choice == "3":
-            connection = connect(DEFAULT_DB)
-            try:
-                rows = connection.execute("SELECT id, email, created_at FROM users").fetchall()
-                for row in rows:
-                    print(row)
-                if not rows:
-                    print("No users registered yet.")
-            finally:
-                connection.close()
-        elif choice in ("1", "2"):
-            email = input("Email: ")
-            password = getpass.getpass("Password (typing is hidden): ")
-            try:
-                if choice == "1":
-                    print("User created. ID:", register_user(email, password))
-                else:
-                    print("Login successful." if authenticate_user(email, password) else "Invalid email or password.")
-            except ValueError as error:
-                print(error)
-        else:
-            print("Choose 1, 2, 3 or 4.")
+# def main():
+#     print("AECWR-15: local registration and login demo")
+#     while True:
+#         choice = input("\n1 Register | 2 Login | 3 Show saved users | 4 Exit: ").strip()
+#         if choice == "4":
+#             break
+#         if choice == "3":
+#             connection = connect(DEFAULT_DB)
+#             try:
+#                 rows = connection.execute("SELECT id, email, created_at FROM users").fetchall()
+#                 for row in rows:
+#                     print(row)
+#                 if not rows:
+#                     print("No users registered yet.")
+#             finally:
+#                 connection.close()
+#         elif choice in ("1", "2"):
+#             email = input("Email: ")
+#             password = getpass.getpass("Password (typing is hidden): ")
+#             try:
+#                 if choice == "1":
+#                     print("User created. ID:", register_user(email, password))
+#                 else:
+#                     print("Login successful." if authenticate_user(email, password) else "Invalid email or password.")
+#             except ValueError as error:
+#                 print(error)
+#         else:
+#             print("Choose 1, 2, 3 or 4.")
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
