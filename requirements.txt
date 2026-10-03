@@ -1,0 +1,8 @@
+flask
+flask_cors
+pathlib
+getpass
+hashlib
+hmac
+secrets
+sqlite3
