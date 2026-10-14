@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart - ALDI E-Commerce</title>
+
+    <link rel="stylesheet" href="/css/cart.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="brand">ALDI E-Commerce</div>
+
+        <div class="user-info" id="user-info"></div>
+    </header>
+
+    <main class="cart-page">
+
+        <div class="cart-header">
+            <h1>Shopping Cart</h1>
+            <p>Review your selected products before checkout.</p>
+        </div>
+
+        <section
+            id="cart-items"
+            class="cart-items"
+        ></section>
+
+        <div
+            id="empty-cart"
+            class="empty-cart hidden"
+        >
+            Your cart is empty.
+        </div>
+
+        <section class="cart-summary">
+
+            <div class="summary-row">
+                <span>Total</span>
+                <strong id="cart-total">€0.00</strong>
+            </div>
+
+            <button
+                id="checkout-button"
+                class="checkout-button"
+            >
+                Proceed to Checkout
+            </button>
+
+        </section>
+
+    </main>
+
+    <script src="/js/cart.js"></script>
+
+</body>
+
+</html>
