@@ -1,27 +1,12 @@
 from flask import Blueprint, render_template_string, abort
+from product_database import (
+    initialize_database,
+    get_all_products,
+    get_product,
+)
 
 catalog_bp = Blueprint("catalog", __name__)
-
-PRODUCTS = [
-    {"id": 1, "name": "Fresh Bananas", "price": "1.29",
-     "size": "1 kg", "category": "Fruit", "image": "🍌",
-     "description": "Fresh bananas for breakfast, snacks and smoothies."},
-    {"id": 2, "name": "Whole Milk", "price": "1.15",
-     "size": "1 litre", "category": "Dairy", "image": "🥛",
-     "description": "Whole milk for your breakfast cereal, coffee and cooking."},
-    {"id": 3, "name": "Sourdough Bread", "price": "2.49",
-     "size": "500 g", "category": "Bakery", "image": "🍞",
-     "description": "A sourdough loaf with a crisp crust. Contains wheat."},
-    {"id": 4, "name": "Red Apples", "price": "2.19",
-     "size": "1 kg", "category": "Fruit", "image": "🍎",
-     "description": "Crisp red apples for snacking and baking."},
-    {"id": 5, "name": "Free Range Eggs", "price": "2.79",
-     "size": "6 eggs", "category": "Dairy & Eggs", "image": "🥚",
-     "description": "A pack of six free range eggs for everyday cooking."},
-    {"id": 6, "name": "Fresh Broccoli", "price": "1.39",
-     "size": "500 g", "category": "Vegetables", "image": "🥦",
-     "description": "Fresh broccoli for steaming, roasting and stir-fries."},
-]
+initialize_database()
 
 PAGE = """
 <!DOCTYPE html>
@@ -219,14 +204,17 @@ PAGE = """
 
 @catalog_bp.get("/products")
 def catalog():
-    return render_template_string(PAGE, products=PRODUCTS, product=None)
+    products = get_all_products()
+    return render_template_string(
+        PAGE, products=products, product=None
+    )
 
 
 @catalog_bp.get("/products/<int:product_id>")
 def product_detail(product_id):
-    product = next(
-        (item for item in PRODUCTS if item["id"] == product_id), None
-    )
+    product = get_product(product_id)
+
     if product is None:
         abort(404)
+
     return render_template_string(PAGE, product=product)
