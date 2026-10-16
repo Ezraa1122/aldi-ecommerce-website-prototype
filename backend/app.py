@@ -11,7 +11,9 @@ from user_database import authenticate_user
 
 app = Flask(__name__)
 CORS(app)
+from catalog import catalog_bp
 
+app.register_blueprint(catalog_bp)
 
 @app.post("/api/login")
 def login():
