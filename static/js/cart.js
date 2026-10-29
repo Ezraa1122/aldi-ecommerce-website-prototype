@@ -125,8 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCart();
     });
 
-    checkoutButton.addEventListener('click', () => {
-        alert('Checkout will be implemented in the next stage.');
+   checkoutButton.addEventListener('click', () => {
+    window.location.href = '/checkout.html';
     });
 
     renderCart();
