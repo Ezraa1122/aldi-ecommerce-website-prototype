@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Demo receipt | ALDI E-Commerce</title>
+  <title>Order Receipt | ALDI E-Commerce</title>
+  <link rel="stylesheet" href="/css/theme.css">
   <link rel="stylesheet" href="/css/receipt.css">
+  <script src="/js/site.js" defer></script>
   <script src="/js/receipt.js" defer></script>
 </head>
 <body>
-  <header>ALDI E-Commerce <span>Student prototype</span></header>
+  <div id="site-header"></div>
   <main>
     <section id="empty-state">
       <h1>No receipt available</h1>
@@ -16,12 +18,20 @@
       <a href="/checkout.html">Go to demo checkout</a>
     </section>
     <article id="receipt" hidden>
+      <div class="success-banner">
+        <span class="success-icon" aria-hidden="true">✓</span>
+        <div>
+          <p class="success-title">Thank you, your order is confirmed!</p>
+          <p class="success-text">Keep your order reference for your records.</p>
+        </div>
+      </div>
       <p class="eyebrow">ORDER SUMMARY</p>
       <h1>Your demo receipt</h1>
       <p class="notice">Demo only — no payment has been taken. This is not proof of purchase.</p>
       <dl class="metadata">
         <div><dt>Order reference</dt><dd id="reference"></dd></div>
         <div><dt>Created</dt><dd id="created"></dd></div>
+        <div><dt>Payment</dt><dd id="payment-method"></dd></div>
       </dl>
       <section class="customer">
         <h2>Customer &amp; delivery details</h2>
@@ -46,5 +56,6 @@
       <p class="storage-note">This receipt is available in this browser tab until the tab is closed. Use Print / Save as PDF to keep a copy.</p>
     </article>
   </main>
+  <div id="site-footer"></div>
 </body>
 </html>

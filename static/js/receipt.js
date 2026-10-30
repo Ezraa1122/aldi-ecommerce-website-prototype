@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const setText = (id, value) => { document.getElementById(id).textContent = value; };
     setText('reference', order.reference);
     setText('created', new Date(order.createdAt).toLocaleString());
+    setText('payment-method', typeof order.paymentMethod === 'string' ? order.paymentMethod : 'Simulated (demo)');
     setText('customer-name', order.customer.fullName);
     setText('customer-email', order.customer.email);
     setText('customer-address', order.customer.address);

@@ -4,14 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ALDI E-Commerce</title>
+    <title>Login | ALDI E-Commerce</title>
 
+    <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/login.css">
 </head>
 
 <body>
 
+<div id="site-header"></div>
+
 <main class="login-page">
+
+    <aside class="login-benefits" aria-label="Why create an account">
+        <p class="login-benefits__eyebrow">Your account</p>
+        <h2>Shop faster every time</h2>
+        <ul>
+            <li>Your details are filled in at checkout</li>
+            <li>Review your order before you pay</li>
+            <li>Simple, safe demo checkout</li>
+        </ul>
+    </aside>
 
     <section class="login-card">
 
@@ -25,7 +38,9 @@
             <p>Sign in to continue shopping.</p>
         </div>
 
-        <form id="login-form">
+        <p id="login-reason" class="notice login-notice" hidden>Please log in to continue to checkout. Your cart is saved.</p>
+
+        <form id="login-form" novalidate>
 
             <div class="form-group">
                 <label for="login-email">Email Address</label>
@@ -35,6 +50,7 @@
                     id="login-email"
                     name="email"
                     placeholder="name@example.com"
+                    autocomplete="email"
                     required
                 >
             </div>
@@ -48,6 +64,7 @@
                         id="login-password"
                         name="password"
                         placeholder="Enter your password"
+                        autocomplete="current-password"
                         required
                     >
 
@@ -71,13 +88,16 @@
 
         <div class="register-link">
             <span>Don't have an account?</span>
-            <a href="#">Create an account</a>
+            <a id="register-link" href="/register.html">Create an account</a>
         </div>
 
     </section>
 
 </main>
 
+<div id="site-footer"></div>
+
+<script src="/js/site.js"></script>
 <script src="/js/login.js"></script>
 
 </body>

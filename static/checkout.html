@@ -5,40 +5,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Checkout - ALDI E-Commerce</title>
+    <title>Checkout | ALDI E-Commerce</title>
 
+    <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/checkout.css">
 </head>
 
 <body>
 
-<header class="header">
-    <div class="brand">ALDI E-Commerce</div>
-    <div class="user-info" id="user-info"></div>
-</header>
+<div id="site-header"></div>
 
 <main class="checkout-page">
+
+    <ol class="checkout-steps" aria-label="Checkout progress">
+        <li class="done"><a href="/cart.html">Cart</a></li>
+        <li class="current" aria-current="step">Delivery details</li>
+        <li>Confirmation</li>
+    </ol>
 
     <div class="checkout-header">
         <h1>Checkout</h1>
         <p>Demo checkout — sample products only. No payment will be taken. Please use fictional delivery details.</p>
     </div>
 
-    <div class="checkout-layout">
+    <div id="checkout-empty" class="checkout-empty" hidden>
+        <p>Your cart is empty, so there is nothing to check out yet.</p>
+        <a class="checkout-empty__link" href="/products">Browse products</a>
+    </div>
+
+    <div class="checkout-layout" id="checkout-layout">
 
         <section class="checkout-form-section">
 
             <h2>Delivery Information</h2>
 
-            <form id="checkout-form">
+            <form id="checkout-form" novalidate>
 
                 <div class="form-group">
                     <label for="full-name">Full Name</label>
                     <input
                         type="text"
                         id="full-name"
+                        autocomplete="name"
                         required
                     >
+                    <span class="field-error" data-error-for="full-name"></span>
                 </div>
 
                 <div class="form-group">
@@ -46,8 +57,10 @@
                     <input
                         type="email"
                         id="email"
+                        autocomplete="email"
                         required
                     >
+                    <span class="field-error" data-error-for="email"></span>
                 </div>
 
                 <div class="form-group">
@@ -55,8 +68,10 @@
                     <input
                         type="text"
                         id="address"
+                        autocomplete="street-address"
                         required
                     >
+                    <span class="field-error" data-error-for="address"></span>
                 </div>
 
                 <div class="form-row">
@@ -66,8 +81,10 @@
                         <input
                             type="text"
                             id="city"
+                            autocomplete="address-level2"
                             required
                         >
+                        <span class="field-error" data-error-for="city"></span>
                     </div>
 
                     <div class="form-group">
@@ -75,15 +92,38 @@
                         <input
                             type="text"
                             id="postcode"
+                            autocomplete="postal-code"
                             required
                         >
+                        <span class="field-error" data-error-for="postcode"></span>
                     </div>
 
                 </div>
 
+                <h2 class="payment-title">Payment</h2>
+
+                <fieldset class="payment-options">
+                    <legend class="visually-hidden">Payment method</legend>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="Card (simulated)" checked>
+                        <span>
+                            <strong>Card (simulated)</strong>
+                            <small>No card details needed. This demo never charges money.</small>
+                        </span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="Pay on delivery (simulated)">
+                        <span>
+                            <strong>Pay on delivery (simulated)</strong>
+                            <small>Pay when the order arrives.</small>
+                        </span>
+                    </label>
+                </fieldset>
+
                 <div
                     id="checkout-error"
                     class="error-message"
+                    role="alert"
                 ></div>
 
                 <button
@@ -92,6 +132,8 @@
                 >
                     Place Order
                 </button>
+
+                <a class="edit-cart" href="/cart.html">← Back to cart</a>
 
             </form>
 
@@ -114,6 +156,9 @@
 
 </main>
 
+<div id="site-footer"></div>
+
+<script src="/js/site.js"></script>
 <script src="/js/checkout.js"></script>
 
 </body>
