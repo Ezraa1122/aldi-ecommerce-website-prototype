@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify, redirect
-from flask_cors import CORS
+from flask import Flask, request, jsonify, redirect  # type: ignore[reportMissingImports]
+from flask_cors import CORS  # type: ignore[reportMissingImports]
 from pathlib import Path
 import sys
 import json
