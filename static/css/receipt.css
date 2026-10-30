@@ -1,0 +1,32 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: #182738; background: #f4f6f8; line-height: 1.6; }
+header { background: #001e50; color: white; padding: 20px 5%; font-size: 20px; font-weight: 700; }
+header span { display: block; font-size: 12px; font-weight: 400; }
+main { max-width: 850px; margin: 36px auto; padding: 0 16px; }
+article, #empty-state { background: white; padding: 36px; border-radius: 12px; box-shadow: 0 4px 20px #001e5010; }
+[hidden] { display: none !important; }
+h1 { font-size: 32px; margin: 0 0 18px; line-height: 1.2; }
+h2 { font-size: 17px; margin: 0 0 8px; }
+.eyebrow { font-size: 12px; font-weight: bold; letter-spacing: 2px; color: #355877; }
+.notice { padding: 12px 16px; background: #fff3d5; border-left: 4px solid #d69100; }
+.metadata { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid #dce2e9; }
+dt { font-size: 13px; color: #526375; }
+dd { margin: 3px 0 0; overflow-wrap: anywhere; font-weight: bold; }
+.customer { margin: 24px 0; overflow-wrap: anywhere; }
+.customer p { margin: 2px 0; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+caption { text-align: left; font-weight: bold; margin: 0 0 12px; }
+th, td { padding: 14px 10px; text-align: right; border-bottom: 1px solid #dce2e9; }
+th { background: #eef3f9; font-size: 13px; }
+th:first-child, td:first-child { text-align: left; }
+td:not(:first-child) { white-space: nowrap; }
+.total { display: flex; justify-content: space-between; gap: 16px; padding: 22px 10px 0; font-size: 22px; }
+.payment { text-align: right; font-size: 14px; color: #526375; }
+.actions { display: flex; align-items: center; gap: 24px; margin-top: 28px; flex-wrap: wrap; }
+button { border: 0; border-radius: 6px; padding: 14px 22px; background: #001e50; color: white; font: inherit; cursor: pointer; }
+a { color: #004a94; }
+:focus-visible { outline: 3px solid #e89800; outline-offset: 3px; }
+.storage-note { font-size: 13px; color: #526375; margin-top: 24px; }
+@media (max-width: 550px) { main { margin: 18px auto; } article, #empty-state { padding: 20px 14px; } h1 { font-size: 26px; } .metadata { grid-template-columns: 1fr; gap: 14px; } th, td { padding: 12px 6px; } }
+@media print { @page { margin: 15mm; } body { background: white; font-size: 11pt; } header, .actions, .storage-note { display: none; } main { margin: 0; padding: 0; max-width: none; } article { box-shadow: none; padding: 0; } .table-scroll { overflow: visible; } tr { break-inside: avoid; } .total { break-inside: avoid; } }

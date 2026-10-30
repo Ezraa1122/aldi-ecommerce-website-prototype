@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo receipt | ALDI E-Commerce</title>
+  <link rel="stylesheet" href="/css/receipt.css">
+  <script src="/js/receipt.js" defer></script>
+</head>
+<body>
+  <header>ALDI E-Commerce <span>Student prototype</span></header>
+  <main>
+    <section id="empty-state">
+      <h1>No receipt available</h1>
+      <p>Complete the demo checkout to view your itemized receipt.</p>
+      <a href="/checkout.html">Go to demo checkout</a>
+    </section>
+    <article id="receipt" hidden>
+      <p class="eyebrow">ORDER SUMMARY</p>
+      <h1>Your demo receipt</h1>
+      <p class="notice">Demo only — no payment has been taken. This is not proof of purchase.</p>
+      <dl class="metadata">
+        <div><dt>Order reference</dt><dd id="reference"></dd></div>
+        <div><dt>Created</dt><dd id="created"></dd></div>
+      </dl>
+      <section class="customer">
+        <h2>Customer &amp; delivery details</h2>
+        <p id="customer-name"></p>
+        <p id="customer-email"></p>
+        <p id="customer-address"></p>
+        <p id="customer-city"></p>
+      </section>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Purchased items">
+        <table>
+          <caption>Items in your demo order</caption>
+          <thead><tr><th scope="col">Product</th><th scope="col">Unit price</th><th scope="col">Qty</th><th scope="col">Line total</th></tr></thead>
+          <tbody id="receipt-items"></tbody>
+        </table>
+      </div>
+      <div class="total"><strong>Order total</strong><strong id="receipt-total"></strong></div>
+      <p class="payment">Payment status: Not processed (demo)</p>
+      <div class="actions">
+        <button type="button" id="print-receipt">Print / Save as PDF</button>
+        <a href="/products">Continue browsing</a>
+      </div>
+      <p class="storage-note">This receipt is available in this browser tab until the tab is closed. Use Print / Save as PDF to keep a copy.</p>
+    </article>
+  </main>
+</body>
+</html>
