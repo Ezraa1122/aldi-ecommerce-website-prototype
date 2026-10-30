@@ -124,3 +124,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderOrderSummary();
 });
+
+checkoutForm.addEventListener('submit', async event => {
+        event.preventDefault();
+        checkoutError.textContent = '';
+
+        const fullName = document.getElementById('full-name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const postcode = document.getElementById('postcode').value.trim();
+
+        if (!fullName || !email || !address || !city || !postcode) {
+            checkoutError.textContent = 'Please fill out all required fields.';
+            return;
+        }
+
+        const payload = {
+            customer: { fullName, email, address, city, postcode },
+            items: cart.map(product => ({
+                name: product.name,
+                unitPriceCents: Math.round(product.price * 100),
+                quantity: product.quantity
+            }))
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || 'Checkout failed.');
+            }
+
+            // Save receipt details for display on receipt.html
+            const receipt = {
+                reference: result.reference,
+                createdAt: result.createdAt,
+                customer: payload.customer,
+                items: payload.items
+            };
+
+            sessionStorage.setItem('aldiDemoReceipt', JSON.stringify(receipt));
+            window.location.href = '/receipt.html';
+
+        } catch (error) {
+            checkoutError.textContent = error.message || 'Unable to process checkout. Please try again.';
+        }
+    });
