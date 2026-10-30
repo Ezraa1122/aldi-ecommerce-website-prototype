@@ -104,7 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        alert('Order submitted successfully!');
+        const receipt = {
+            reference: 'DEMO-' + crypto.randomUUID(),
+            createdAt: new Date().toISOString(),
+            customer: {fullName, email, address, city, postcode},
+            items: cart.map(product => ({
+                name: product.name,
+                unitPriceCents: Math.round(product.price * 100),
+                quantity: product.quantity
+            }))
+        };
+        try {
+            sessionStorage.setItem('aldiDemoReceipt', JSON.stringify(receipt));
+            window.location.href = '/receipt.html';
+        } catch (error) {
+            checkoutError.textContent = 'Unable to save the demo receipt. Please allow browser storage and try again.';
+        }
     });
 
     renderOrderSummary();

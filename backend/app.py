@@ -9,7 +9,7 @@ sys.path.append(str(ROOT_DIR))
 
 from user_database import authenticate_user
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=str(ROOT_DIR / "static"), static_url_path="")
 CORS(app)
 from catalog import catalog_bp
 
