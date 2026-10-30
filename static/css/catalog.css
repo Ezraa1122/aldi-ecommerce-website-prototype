@@ -1,0 +1,663 @@
+/* Product catalog + detail (AECWR-22). AECWR-29: styles moved out of catalog.py and
+   restyled as a grocery store with the shared theme (theme.css). */
+
+main {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 28px 24px 0;
+}
+
+/* ---------- Hero banner ---------- */
+
+.hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    align-items: center;
+    gap: 24px;
+    overflow: hidden;
+    padding: 44px 48px;
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(circle at 85% 50%, rgba(0, 163, 224, 0.35), transparent 55%),
+        linear-gradient(120deg, var(--navy) 0%, #0a2f73 100%);
+    color: #fff;
+}
+
+.hero .eyebrow {
+    color: var(--accent);
+}
+
+.hero h1 {
+    margin: 10px 0 10px;
+    color: #fff;
+    font-size: clamp(30px, 4.6vw, 48px);
+    line-height: 1.08;
+}
+
+.hero .intro {
+    max-width: 44ch;
+    margin: 0 0 24px;
+    color: #d3deef;
+    font-size: 17px;
+}
+
+.hero-cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 26px;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    color: var(--navy-dark);
+    font-weight: 800;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.hero-cta:hover {
+    background: #ffab2e;
+}
+
+.hero-cta:active {
+    transform: translateY(1px);
+}
+
+.hero-art {
+    position: relative;
+    justify-self: center;
+    width: 300px;
+    height: 240px;
+}
+
+.hero-photo {
+    position: absolute;
+    overflow: hidden;
+    border: 5px solid rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+    animation: float 6s ease-in-out infinite;
+}
+
+.hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-photo--1 {
+    top: 0;
+    left: 70px;
+    width: 160px;
+    height: 160px;
+}
+
+.hero-photo--2 {
+    bottom: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+    animation-delay: -2s;
+}
+
+.hero-photo--3 {
+    right: 0;
+    bottom: 10px;
+    width: 110px;
+    height: 110px;
+    animation-delay: -4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* ---------- Product grid ---------- */
+
+.section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 40px 0 18px;
+}
+
+.section-head h2 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.section-head span {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    scroll-margin-top: 100px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: #c4d2e4;
+    box-shadow: var(--shadow-hover);
+}
+
+.art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 200px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 55%, #f3f8ee 0%, #e6efe0 70%);
+    font-size: 92px;
+}
+
+/* Product photo covers the emoji; if the photo cannot load it is removed and the emoji shows. */
+.art img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .art img {
+    transform: scale(1.06);
+}
+
+.card-link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+}
+
+.card-link:hover h2 {
+    color: var(--link);
+}
+
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 18px 20px 0;
+    background: var(--surface);
+}
+
+.category {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.info .category {
+    align-self: flex-start;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--sky-soft);
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.card h2 {
+    margin: 10px 0 2px;
+    font-size: 20px;
+}
+
+.size {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px 20px;
+    background: var(--surface);
+}
+
+/* Price shown in a box, like shelf labels in a supermarket */
+.price {
+    display: inline-block;
+    color: var(--navy);
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+.bottom .price {
+    padding: 2px 12px;
+    border: 2px solid var(--navy);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    font-size: 24px;
+}
+
+/* Add to cart: the orange main action, like on the rest of the site */
+.add-btn {
+    min-height: 44px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    color: var(--navy-dark);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.add-btn:hover {
+    background: #ffab2e;
+}
+
+.add-btn:active {
+    transform: translateY(1px);
+}
+
+.add-btn.is-added {
+    background: var(--success);
+    color: #fff;
+    animation: pop 0.35s ease;
+}
+
+@keyframes pop {
+    40% { transform: scale(1.08); }
+}
+
+/* Cards appear one after another when the page opens */
+.grid .card {
+    animation: rise 0.5s ease both;
+}
+
+.grid .card:nth-child(2) { animation-delay: 0.06s; }
+.grid .card:nth-child(3) { animation-delay: 0.12s; }
+.grid .card:nth-child(4) { animation-delay: 0.18s; }
+.grid .card:nth-child(5) { animation-delay: 0.24s; }
+.grid .card:nth-child(6) { animation-delay: 0.3s; }
+
+.hero {
+    animation: rise 0.6s ease both;
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+}
+
+.add-btn--large {
+    flex: 1;
+    min-height: 52px;
+    font-size: 17px;
+}
+
+/* ---------- Search + category filter ---------- */
+
+.catalog-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.search {
+    flex: 1 1 260px;
+    max-width: 380px;
+}
+
+.search input {
+    width: 100%;
+    height: 46px;
+    padding: 0 16px 0 44px;
+    border: 1px solid #c5ced9;
+    border-radius: 999px;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6a7e' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") 16px center / 18px no-repeat,
+        var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 15px;
+}
+
+.search input:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(0, 30, 80, 0.15);
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    min-height: 38px;
+    padding: 0 16px;
+    border: 1px solid #c5ced9;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--navy);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.chip:hover {
+    border-color: var(--navy);
+}
+
+.chip[aria-pressed="true"] {
+    border-color: var(--navy);
+    background: var(--navy);
+    color: #fff;
+}
+
+.no-results {
+    padding: 40px 24px;
+    border: 2px dashed #c5ced9;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    text-align: center;
+}
+
+.no-results p {
+    margin: 0 0 14px;
+    color: var(--muted);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+/* ---------- Quantity + add to cart on the product page ---------- */
+
+.add-form {
+    margin-top: 20px;
+}
+
+.add-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.add-row {
+    display: flex;
+    gap: 12px;
+}
+
+.add-row input {
+    width: 92px;
+    height: 52px;
+    padding: 0 12px;
+    border: 1px solid #c5ced9;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.add-row input:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(0, 30, 80, 0.15);
+}
+
+.add-row input[aria-invalid="true"] {
+    border-color: var(--danger);
+    background: var(--danger-bg);
+}
+
+.field-error {
+    min-height: 18px;
+    margin: 6px 0 0;
+    color: var(--danger);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ---------- Product detail ---------- */
+
+.back {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back:hover {
+    border-color: var(--navy);
+}
+
+.detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.detail .art {
+    min-height: 460px;
+    font-size: 170px;
+}
+
+.detail .art img {
+    animation: photo-in 0.6s ease both;
+}
+
+@keyframes photo-in {
+    from { opacity: 0; transform: scale(1.04); }
+    to { opacity: 1; transform: none; }
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 44px;
+}
+
+.detail-info h1 {
+    margin: 8px 0 12px;
+    font-size: clamp(30px, 4vw, 42px);
+}
+
+.detail-info > p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.detail .price {
+    align-self: flex-start;
+    margin: 24px 0;
+    padding: 4px 18px;
+    border: 3px solid var(--navy);
+    border-radius: var(--radius-sm);
+    font-size: 44px;
+}
+
+.detail-info > p.package {
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+}
+
+.detail-info > p.category {
+    margin-top: 16px;
+    font-size: 13px;
+}
+
+/* ---------- Shopping info on the product page ---------- */
+
+.perks {
+    display: grid;
+    gap: 8px;
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.perks li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.perks li::before {
+    content: "";
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f7a4a' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 14px no-repeat, var(--success-bg);
+}
+
+/* ---------- Promo boxes under the grid ---------- */
+
+.promos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 40px;
+}
+
+.promo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px 26px;
+    border-radius: var(--radius-lg);
+}
+
+.promo--fresh {
+    background: #e8f4e3;
+}
+
+.promo--price {
+    background: #fff1d6;
+}
+
+.promo-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #fff;
+    font-size: 30px;
+}
+
+.promo h2 {
+    margin: 0 0 4px;
+    font-size: 19px;
+}
+
+.promo p {
+    margin: 0;
+    color: var(--muted);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 960px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 36px 32px;
+    }
+
+    .hero-art {
+        display: none;
+    }
+
+    .promos {
+        grid-template-columns: 1fr;
+    }
+
+    .detail {
+        grid-template-columns: 1fr;
+    }
+
+    .detail .art {
+        min-height: 260px;
+        font-size: 120px;
+    }
+}
+
+@media (max-width: 560px) {
+    main {
+        padding: 18px 16px 0;
+    }
+
+    .hero {
+        padding: 28px 22px;
+    }
+
+    .hero .intro {
+        font-size: 16px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .art {
+        min-height: 170px;
+    }
+
+    .detail-info {
+        padding: 24px;
+    }
+
+    .detail .price {
+        font-size: 36px;
+    }
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | ALDI E-Commerce</title>
+
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+
+<body>
+
+<div id="site-header"></div>
+
+<main class="login-page">
+
+    <aside class="login-benefits" aria-label="Why create an account">
+        <p class="login-benefits__eyebrow">New customer</p>
+        <h2>Create your account in one minute</h2>
+        <ul>
+            <li>Only an email address and a password</li>
+            <li>Your cart is kept while you sign up</li>
+            <li>Simple, safe demo checkout</li>
+        </ul>
+    </aside>
+
+    <section class="login-card">
+
+        <div class="login-header">
+            <h1>Create an account</h1>
+            <p>Register to place orders.</p>
+        </div>
+
+        <form id="register-form" novalidate>
+
+            <div class="form-group">
+                <label for="register-email">Email Address</label>
+                <input type="email" id="register-email" placeholder="name@example.com"
+                    autocomplete="email" required>
+                <span class="field-error" data-error-for="register-email"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password" placeholder="At least 8 characters"
+                    autocomplete="new-password" minlength="8" required>
+                <span class="hint">Use 8 to 128 characters.</span>
+                <span class="field-error" data-error-for="register-password"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="register-confirm">Confirm Password</label>
+                <input type="password" id="register-confirm" placeholder="Repeat your password"
+                    autocomplete="new-password" required>
+                <span class="field-error" data-error-for="register-confirm"></span>
+            </div>
+
+            <div id="register-error" class="error-message" role="alert"></div>
+
+            <button type="submit" class="login-button">
+                Create account
+            </button>
+
+        </form>
+
+        <div class="register-link">
+            <span>Already have an account?</span>
+            <a id="login-link" href="/login.html">Log in</a>
+        </div>
+
+    </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="/js/site.js"></script>
+<script src="/js/register.js"></script>
+
+</body>
+</html>

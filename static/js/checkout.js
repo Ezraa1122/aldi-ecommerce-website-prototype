@@ -1,4 +1,14 @@
+/* Checkout (AECWR-27 UI, AECWR-28 backend).
+   - customers must be logged in (guests are sent to login and brought back)
+   - the order summary comes from the shared cart (AldiCart in site.js)
+   - every field is validated before the order is sent
+   - the order is saved by POST /api/checkout, which prices items from the product database
+   - payment is simulated: no money is taken */
 document.addEventListener('DOMContentLoaded', () => {
+
+    if (!AldiAuth.requireLogin('checkout')) {
+        return;
+    }
 
     const checkoutForm = document.getElementById('checkout-form');
     const orderItems = document.getElementById('order-items');
@@ -6,174 +16,134 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkoutError = document.getElementById('checkout-error');
     const userInfo = document.getElementById('user-info');
     const emailInput = document.getElementById('email');
+    const submitButton = checkoutForm.querySelector('button[type="submit"]');
+    const money = AldiUI.formatMoney;
 
-    const userEmail = localStorage.getItem('userEmail');
+    const userEmail = AldiAuth.email();
+    userInfo.textContent = `Logged in as ${userEmail}`;
+    emailInput.value = userEmail;
 
-    if (userEmail) {
-        userInfo.textContent = `Logged in as ${userEmail}`;
-        emailInput.value = userEmail;
+    const cart = AldiCart.items();
+
+    if (cart.length === 0) {
+        document.getElementById('checkout-layout').hidden = true;
+        document.getElementById('checkout-empty').hidden = false;
+        return;
     }
 
-    const cart = [
-        {
-            id: 1,
-            name: 'ALDI Milk',
-            price: 1.49,
-            quantity: 1
-        },
-        {
-            id: 2,
-            name: 'Chocolate Cookies',
-            price: 2.29,
-            quantity: 2
-        }
-    ];
-
     function renderOrderSummary() {
-
         orderItems.innerHTML = '';
 
         cart.forEach(product => {
-
             const item = document.createElement('div');
             item.className = 'order-item';
-
-            const itemTotal = product.price * product.quantity;
-
             item.innerHTML = `
-                <span>
-                    ${product.name} × ${product.quantity}
-                </span>
-
-                <strong>
-                    €${itemTotal.toFixed(2)}
-                </strong>
+                <span>${AldiUI.escapeHTML(product.name)} × ${product.quantity}</span>
+                <strong>${money(product.priceCents * product.quantity)}</strong>
             `;
-
             orderItems.appendChild(item);
         });
 
-        const total = cart.reduce((sum, product) => {
-            return sum + product.price * product.quantity;
-        }, 0);
-
-        orderTotal.textContent = `€${total.toFixed(2)}`;
+        orderTotal.textContent = money(AldiCart.totalCents());
     }
 
-    checkoutForm.addEventListener('submit', event => {
+    /* Validation rules: each returns true or the message to show under the field. */
+    const rules = {
+        'full-name': value => value.length >= 2 || 'Please enter your full name.',
+        'email': value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || 'Please enter a valid email address.',
+        'address': value => value.length >= 3 || 'Please enter your street and house number.',
+        'city': value => value.length >= 2 || 'Please enter your city.',
+        'postcode': value => /^[A-Za-z0-9 -]{4,10}$/.test(value) || 'Please enter a valid postcode, e.g. 10115.'
+    };
 
-        event.preventDefault();
+    function validateField(id) {
+        const input = document.getElementById(id);
+        const message = document.querySelector(`[data-error-for="${id}"]`);
+        const result = rules[id](input.value.trim());
+        const valid = result === true;
+        input.setAttribute('aria-invalid', valid ? 'false' : 'true');
+        message.textContent = valid ? '' : result;
+        return valid;
+    }
 
-        checkoutError.textContent = '';
-
-        const fullName = document
-            .getElementById('full-name')
-            .value
-            .trim();
-
-        const email = document
-            .getElementById('email')
-            .value
-            .trim();
-
-        const address = document
-            .getElementById('address')
-            .value
-            .trim();
-
-        const city = document
-            .getElementById('city')
-            .value
-            .trim();
-
-        const postcode = document
-            .getElementById('postcode')
-            .value
-            .trim();
-
-        if (
-            !fullName ||
-            !email ||
-            !address ||
-            !city ||
-            !postcode
-        ) {
-            checkoutError.textContent =
-                'Please fill out all required fields.';
-
-            return;
-        }
-
-        const receipt = {
-            reference: 'DEMO-' + crypto.randomUUID(),
-            createdAt: new Date().toISOString(),
-            customer: {fullName, email, address, city, postcode},
-            items: cart.map(product => ({
-                name: product.name,
-                unitPriceCents: Math.round(product.price * 100),
-                quantity: product.quantity
-            }))
-        };
-        try {
-            sessionStorage.setItem('aldiDemoReceipt', JSON.stringify(receipt));
-            window.location.href = '/receipt.html';
-        } catch (error) {
-            checkoutError.textContent = 'Unable to save the demo receipt. Please allow browser storage and try again.';
-        }
+    // Re-check a field when the customer leaves it, so errors disappear once fixed.
+    Object.keys(rules).forEach(id => {
+        document.getElementById(id).addEventListener('blur', () => {
+            if (document.getElementById(id).value.trim()) {
+                validateField(id);
+            }
+        });
     });
 
-    renderOrderSummary();
-});
-
-checkoutForm.addEventListener('submit', async event => {
+    checkoutForm.addEventListener('submit', async event => {
         event.preventDefault();
         checkoutError.textContent = '';
 
-        const fullName = document.getElementById('full-name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const city = document.getElementById('city').value.trim();
-        const postcode = document.getElementById('postcode').value.trim();
-
-        if (!fullName || !email || !address || !city || !postcode) {
-            checkoutError.textContent = 'Please fill out all required fields.';
+        const invalid = Object.keys(rules).filter(id => !validateField(id));
+        if (invalid.length) {
+            checkoutError.textContent = 'Please correct the highlighted fields.';
+            document.getElementById(invalid[0]).focus();
             return;
         }
 
-        const payload = {
-            customer: { fullName, email, address, city, postcode },
-            items: cart.map(product => ({
-                name: product.name,
-                unitPriceCents: Math.round(product.price * 100),
-                quantity: product.quantity
-            }))
+        const value = id => document.getElementById(id).value.trim();
+        const customer = {
+            fullName: value('full-name'),
+            email: value('email'),
+            address: value('address'),
+            city: value('city'),
+            postcode: value('postcode')
         };
+        const paymentMethod = checkoutForm.querySelector('input[name="payment"]:checked').value;
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Processing simulated payment…';
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/api/checkout', {
+            const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    customer,
+                    items: cart.map(product => ({
+                        productId: product.id,
+                        name: product.name,
+                        quantity: product.quantity
+                    }))
+                })
             });
 
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                throw new Error(result.message || 'Checkout failed.');
+                throw new Error(result.message || 'Checkout failed. Please try again.');
             }
 
-            // Save receipt details for display on receipt.html
+            // Receipt uses the prices confirmed by the server.
             const receipt = {
                 reference: result.reference,
                 createdAt: result.createdAt,
-                customer: payload.customer,
-                items: payload.items
+                paymentMethod,
+                customer,
+                items: result.items.map(item => ({
+                    name: item.name,
+                    unitPriceCents: item.unitPriceCents,
+                    quantity: item.quantity
+                }))
             };
 
             sessionStorage.setItem('aldiDemoReceipt', JSON.stringify(receipt));
+            AldiCart.clear();
             window.location.href = '/receipt.html';
 
         } catch (error) {
-            checkoutError.textContent = error.message || 'Unable to process checkout. Please try again.';
+            checkoutError.textContent = error instanceof TypeError
+                ? 'Cannot reach the server. Please make sure the backend is running and try again.'
+                : error.message;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Place Order';
         }
     });
+
+    renderOrderSummary();
+});

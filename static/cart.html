@@ -5,18 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Shopping Cart - ALDI E-Commerce</title>
+    <title>Shopping Cart | ALDI E-Commerce</title>
 
+    <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/cart.css">
 </head>
 
 <body>
 
-    <header class="header">
-        <div class="brand">ALDI E-Commerce</div>
-
-        <div class="user-info" id="user-info"></div>
-    </header>
+<div id="site-header"></div>
 
     <main class="cart-page">
 
@@ -34,10 +31,16 @@
             id="empty-cart"
             class="empty-cart hidden"
         >
-            Your cart is empty.
+            <p>Your cart is empty.</p>
+            <a class="empty-cart__link" href="/products">Browse products</a>
         </div>
 
-        <section class="cart-summary">
+        <section class="cart-summary" id="cart-summary">
+
+            <div class="summary-line">
+                <span>Items</span>
+                <span id="cart-count">0</span>
+            </div>
 
             <div class="summary-row">
                 <span>Total</span>
@@ -51,11 +54,18 @@
                 Proceed to Checkout
             </button>
 
+            <p class="summary-note" id="login-hint" hidden>You will be asked to log in before checkout.</p>
+            <p class="summary-note">Demo store: no payment is taken.</p>
+            <a class="continue-link" href="/products">← Continue shopping</a>
+
         </section>
 
     </main>
 
-    <script src="/js/cart.js"></script>
+    <div id="site-footer"></div>
+
+<script src="/js/site.js"></script>
+<script src="/js/cart.js"></script>
 
 </body>
 
