@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('isLoggedIn', 'true');
 
             alert('Login successful!');
+            window.location.href = '/cart.html';
 
         } catch (error) {
             loginError.textContent = error.message;
